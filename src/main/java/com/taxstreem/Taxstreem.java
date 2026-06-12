@@ -27,4 +27,8 @@ public class Taxstreem
         APIClient apiClient = new APIClient(config.apiKey(), config.sharedSecret(), config.debug());
         this.flux = new Flux(apiClient);
     }
+
+    public static void main (String[] args) {
+        System.out.println("Starting Taxstreem");
+    }
 }
