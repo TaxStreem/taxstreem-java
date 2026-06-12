@@ -1,9 +1,14 @@
 package com.taxstreem;
 
+import com.taxstreem.client.APIClient;
+import com.taxstreem.dto.TaxStreemConfig;
 import com.taxstreem.services.Encryption;
 import com.taxstreem.services.Flux;
 
 
+/**
+ *
+ */
 public class Taxstreem
 {
     private final Flux flux;
@@ -17,8 +22,9 @@ public class Taxstreem
         return encryption;
     }
 
-    public Taxstreem(Flux flux, Encryption encryption) {
-        this.flux = flux;
-        this.encryption = encryption;
+    public Taxstreem(TaxStreemConfig config) {
+        this.encryption = new Encryption();
+        APIClient apiClient = new APIClient(config.apiKey(), config.sharedSecret(), config.debug());
+        this.flux = new Flux(apiClient);
     }
 }
