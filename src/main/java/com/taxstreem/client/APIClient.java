@@ -6,7 +6,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-public class APIClient {
+public class APIClient implements IApiClient {
     private static final String BASE_URL = "https://api.taxstreem.com/v1";
     private static final int DEFAULT_MAX_RETRIES = 3;
     private static final long BASE_BACKOFF_MS = 500; // 500ms, 1000ms, 2000ms...
@@ -15,6 +15,7 @@ public class APIClient {
     private final String apiSecret;
     private final boolean debug;
     private final int maxRetries;
+    private final HttpSender sender;
 
     public APIClient(String apiKey, String apiSecret) {
         this(apiKey, apiSecret, true, DEFAULT_MAX_RETRIES);
@@ -29,10 +30,20 @@ public class APIClient {
         this.apiSecret = apiSecret;
         this.debug = debug;
         this.maxRetries = maxRetries;
+        HttpClient client = HttpClient.newHttpClient();
+        this.sender = req -> client.send(req, HttpResponse.BodyHandlers.ofString());
     }
 
+    APIClient(String apiKey, String apiSecret, boolean debug, int maxRetries, HttpSender sender) {
+        this.apiKey = apiKey;
+        this.apiSecret = apiSecret;
+        this.debug = debug;
+        this.maxRetries = maxRetries;
+        this.sender = sender;
+    }
+
+    @Override
     public String request(String method, String path, Object body) throws Exception {
-        HttpClient client = HttpClient.newHttpClient();
         URI uri = URI.create(BASE_URL + path);
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -54,7 +65,7 @@ public class APIClient {
                     System.out.println("Retry attempt " + attempt + " of " + maxRetries);
                 }
 
-                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                HttpResponse<String> response = sender.send(request);
 
                 if (debug) {
                     System.out.println("Status Code: " + response.statusCode());
@@ -70,7 +81,7 @@ public class APIClient {
 
                 return response.body();
 
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException e) {
                 lastException = e;
                 if (attempt < maxRetries) {
                     attempt++;

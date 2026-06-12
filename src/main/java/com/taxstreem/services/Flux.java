@@ -1,7 +1,7 @@
 package com.taxstreem.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.taxstreem.client.APIClient;
+import com.taxstreem.client.IApiClient;
 import com.taxstreem.dto.VAT.BatchFilingResponseDto;
 import com.taxstreem.dto.VAT.FilingResponseDto;
 import com.taxstreem.dto.VAT.VatFilingBatchPayloadDto;
@@ -10,9 +10,9 @@ import com.taxstreem.dto.WHT.WhtFilingBatchPayloadDto;
 import com.taxstreem.dto.WHT.WhtFilingPayloadDto;
 
 public class Flux {
-    private APIClient apiClient;
+    private final IApiClient apiClient;
 
-    public Flux(APIClient apiClient) {
+    public Flux(IApiClient apiClient) {
         this.apiClient = apiClient;
     }
 
