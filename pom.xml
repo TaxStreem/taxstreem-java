@@ -26,7 +26,7 @@
   <!-- Required: Developer info -->
   <developers>
     <developer>
-      <name>Johnson Olaoluwa</name>
+      <name>Taxstreem</name>
       <email>kastrouddev@gmail.com</email>
     </developer>
   </developers>
@@ -87,7 +87,7 @@
         <version>0.5.0</version>
         <extensions>true</extensions>
         <configuration>
-          <publishingServerId>taxstreem-sdk</publishingServerId>
+          <publishingServerId>central</publishingServerId>
           <autoPublish>false</autoPublish>
         </configuration>
       </plugin>
